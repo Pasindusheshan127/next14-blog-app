@@ -1,30 +1,64 @@
-import Link from "next/link";
+"use client";
+import { useState } from "react";
 import style from "./links.module.css";
 import Navbvarlink from "./navbarLink/NavbarLink";
+
+const links = [
+  {
+    title: "HomePage",
+    path: "/",
+  },
+  {
+    title: "About",
+    path: "/about",
+  },
+  {
+    title: "Contact",
+    path: "/contact",
+  },
+  {
+    title: "Blog",
+    path: "/blog",
+  },
+];
+
 const Links = () => {
-  const links = [
-    {
-      title: "HomePage",
-      path: "/",
-    },
-    {
-      title: "About",
-      path: "/about",
-    },
-    {
-      title: "Contact",
-      path: "/contact",
-    },
-    {
-      title: "Blog",
-      path: "/blog",
-    },
-  ];
+  const [open, setOpen] = useState(false);
+
+  //temporary
+  const session = true;
+  const isAdmin = true;
+
   return (
-    <div className={style.links}>
-      {links.map((link) => (
-        <Navbvarlink item={link} key={link.title} />
-      ))}
+    <div className={style.container}>
+      <div className={style.links}>
+        {links.map((link) => (
+          <Navbvarlink item={link} key={link.title} />
+        ))}
+        {session ? (
+          <>
+            {isAdmin && (
+              <Navbvarlink item={{ title: "Admin", path: "/admin" }} />
+            )}
+            <button className={style.logout}>Logout</button>
+          </>
+        ) : (
+          <Navbvarlink item={{ title: "Login", path: "/login" }} />
+        )}
+      </div>
+      <button
+        className={style.menuButton}
+        onClick={() => setOpen((prev) => !prev)}
+      >
+        Menu
+      </button>
+      {open && (
+        <div className={style.mobilelinks}>
+          {links.map((link) => (
+            <Navbvarlink item={link} key={link.title} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
